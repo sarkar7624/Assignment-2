@@ -1,0 +1,137 @@
+package assignment2;
+
+
+import java.lang.*;
+public class Assignment2 {
+
+     public String infixToPostfixConversion(String exp){
+         int i;
+         Stack s = new Stack();
+         char temp;
+         String output="";
+         for(i=0;i<exp.length();i++)
+         {
+             temp=exp.charAt(i);
+             
+             if(Character.isLetterOrDigit(temp))
+                 output+=temp;
+             else if(temp=='(')
+                 s.push(temp);
+             else if(temp==')')
+             {
+                 while(!s.isEmpty()&&s.stackTop()!='(')
+                 {
+                     output+=s.pop();
+                 }
+                 if(s.isEmpty())
+                 {
+                     return "Expression not valid";
+                 }
+                 else
+                 {
+                     s.pop();
+                 }
+             }
+             else
+             {
+                 while(!s.isEmpty()&& (precedence(temp)<=precedence(s.stackTop())))
+                 {
+                     output+=s.pop();
+                 }
+                 s.push(temp);
+             }
+         }
+         while(!s.isEmpty())
+         {
+             output+=s.pop();
+         }
+         return output;
+     }
+      
+     public int precedence(char c)
+     {
+         switch(c)
+         {
+             case '+':
+             case '-':
+                 return 1;
+             case '*':
+             case '/':
+                 return 2;
+             case '^':
+                 return 3;
+         }
+     return -1;
+         }
+     
+    public static void main(String[] args) {
+             String exp="(a+b*(c^d-e)^(f+g*h)-i)";
+             Assignment2 i=new Assignment2();
+             String output = i.infixToPostfixConversion(exp);
+             System.out.println(output);
+            } 
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//under same package create another class named Stack
+
+package assignment2;
+
+/**
+ *
+ * @author USER
+ */
+public class Stack {
+    int top=-1;
+    static final int MAX=1000;
+    char[] stack = new char[MAX];
+    
+    public void push(char element)
+    {
+        if(top>MAX)
+            System.out.println("Stack is full");
+        else
+            stack[++top]=element;
+        System.out.println("pushed to stack"+element);
+    }
+    public char pop()
+    {
+        if(!isEmpty())
+        {
+            System.out.println("popped from stack:"+stack[top]);
+        return stack[top--];
+        }
+        else
+        {
+           System.out.println("Stack is Empty");
+        return 0;
+        }
+    }
+    public boolean isEmpty()
+    {
+        if(top<0)
+        {
+            System.out.println("Stack empty");
+            return true;
+        }
+        else
+            return false;
+        
+    }
+    public char stackTop()
+    {
+        return stack[top];
+    }
+}
